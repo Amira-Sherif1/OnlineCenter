@@ -1,0 +1,42 @@
+﻿@model List<Models.Book>
+
+<div class="row mb-3">
+    <div class="col-6">
+        <h2>Available Books</h2>
+    </div>
+</div>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>@item.Id</th>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.Price</td>
+                    <td>
+                        <button type="button" class="btn btn-dark" onclick="window.location.href='/Book/Edit?BookId=@item.Id'">Edit</button>
+                        <button type="button" class="btn btn-dark" onclick="window.location.href='/Book/Delete?BookId=@item.Id'">Delete</button>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="col-6 mt-9">
+    <button type="button" class="btn btn-danger" onclick="window.location.href='/Book/Create'">Add New Course</button>
+</div>

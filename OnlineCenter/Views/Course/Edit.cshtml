@@ -1,0 +1,73 @@
+﻿@model Models.Course
+
+@{
+    Layout = "~/Views/Shared/DashLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <!-- Add a back arrow link -->
+        <div class="mb-4">
+            <a href="@Url.Action("Index", "Course")" class="btn btn-link">
+                <i class="bx bx-arrow-back me-2"></i> Back to Courses
+            </a>
+        </div>
+
+        <!-- Card Layout for Editing Course -->
+        <div class="row">
+            <div class="col-xl">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Edit Course</h5>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Edit" method="post">
+                            <input type="hidden" asp-for="Id" />
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <!-- Course Name -->
+                            <div class="form-group">
+                                <label asp-for="Name" class="form-label">Course Name</label>
+                                <input asp-for="Name" class="form-control" required />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label asp-for="Description" class="form-label">Description</label>
+                                <textarea asp-for="Description" class="form-control"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <!-- Subject -->
+                            <div class="form-group">
+                                <label asp-for="SubjectId" class="form-label">Subject</label>
+                                <select asp-for="SubjectId" asp-items="ViewBag.Subjects" class="form-control" required>
+                                    <option value="">Select Subject</option>
+                                </select>
+                                <span asp-validation-for="SubjectId" class="text-danger"></span>
+                            </div>
+
+                            <!-- Update and Cancel Buttons -->
+                            <div class="form-group mt-3">
+                                <input type="submit" value="Update" class="btn btn-primary" />
+                                <a href="@Url.Action("Index", "Course")" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

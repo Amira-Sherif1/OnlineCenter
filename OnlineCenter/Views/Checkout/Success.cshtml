@@ -1,0 +1,60 @@
+﻿<!-- Views/Checkout/Success.cshtml -->
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using Models.ViewData
+@model CheckoutSuccessViewModel
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="success-icon mb-4">
+                        <i class="fas fa-check-circle text-success fa-5x"></i>
+                    </div>
+                    <h2 class="card-title mb-4">Payment Successful!</h2>
+                    <p class="card-text mb-4">
+                        Thank you for your payment. You can now access your lecture content.
+                    </p>
+                    <div class="buttons">
+                        <a href="@Url.Action("LectureDetails", "Userlectures", new { LectureId = Model.LectureId })"
+                           class="inline-block bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors">
+                            Go to Lecture
+                        </a>
+                        <a href="@Url.Action("Index", "Home")"
+                           class="inline-block border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                            Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* 
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
+        <div class="mb-6">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                <i class="fas fa-check text-green-500 text-2xl"></i>
+            </div>
+        </div>
+
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Payment Successful!</h1>
+        <p class="text-gray-600 mb-6">Thank you for your payment. You can now access your lecture content.</p>
+
+        <div class="space-x-4">
+            <a href="@Url.Action("View", "Lecture", new { id = Model.LectureId })"
+               class="inline-block bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors">
+                Go to Lecture
+            </a>
+            <a href="@Url.Action("Index", "Home")"
+               class="inline-block border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+ *@
+

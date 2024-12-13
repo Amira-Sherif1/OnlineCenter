@@ -1,0 +1,36 @@
+﻿@model List<Models.Answer>
+
+<div class="row mb-3">
+    <div class="col-6">
+        <h2>Your Answers</h2>
+    </div>
+</div>
+
+<div class="row">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Doc</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr onclick="window.location.href='/Answer/Display?AnswerId=@item.Id'" style="cursor: pointer;">
+                    <th>@item.Id</th>
+                    <td>@item.AnswerDoc</td>
+                    <td>
+                        <button type="button" class="btn btn-dark" onclick="event.stopPropagation(); window.location.href='/Answer/Edit?AnswerId=@item.Id'">Edit</button>
+                        <button type="button" class="btn btn-dark" onclick="event.stopPropagation(); window.location.href='/Answer/Delete?AnswerId=@item.Id'">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="col-6 mt-3">
+    <button type="button" class="btn btn-danger" onclick="window.location.href='/Answer/Create'">Add New Answer</button>
+</div>

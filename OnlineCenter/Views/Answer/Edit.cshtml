@@ -1,0 +1,32 @@
+﻿ @model Models.Answer
+
+<div class="row mb-3">
+    <div class="col-6">
+        <h2>Edit Answer</h2>
+    </div>
+</div>
+
+<div class="row">
+    <form action="/Answer/Edit" method="post" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <input type="hidden" class="form-control" id="AnswerId" name="Id" value="@Model.Id">
+        </div>
+
+        <div class="mb-3">
+            <label for="AnswerDoc" class="form-label">Answer Document</label>
+
+            <!-- If there's an existing file, show a download link -->
+            @if (!string.IsNullOrEmpty(Model.AnswerDoc))
+            {
+                <a href="@Url.Content("~/Document/" + Model.AnswerDoc)" target="_blank">View Current Document</a>
+                <br />
+                <label for="AnswerDoc" class="form-label">Upload New Document (optional)</label>
+            }
+
+            <input type="file" class="form-control" id="AnswerDoc" name="AnswerDoc">
+        </div>
+
+        <button type="submit" class="btn btn-danger">Submit</button>
+    </form>
+</div>

@@ -1,0 +1,105 @@
+﻿@using Models
+@model List<Lecture>
+@{
+    Layout = "~/Views/Shared/DashLayout.cshtml";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Add Lecture Button -->
+    <div class="mb-4">
+        <a href="@Url.Action("AddLecture", "Lectures", new { CourseId = ViewBag.CourseId })" class="btn btn-primary">Add Lecture</a>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header">All Lectures</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Lecture Title</th>
+                        <th>Document</th>
+                        <th>Video</th>
+                        <th>Assignment</th>
+                        <th>#Students</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><strong>@item.Title</strong></td>
+                            <td><a href="~/Doc/@item.Document">Document</a></td>
+                            <td><a href="~/videos/@item.Video">Video</a></td>
+                            <td><a href="~/Assignments/@item.Assignment">Assignment</a></td>
+                            <td>@ViewBag.StudentCounts[@item.Id]</td>
+                            <td><span class="badge bg-label-primary me-1">@item.Price</span></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/Lectures/EditLicture?Id=@item.Id&CourseId=@ViewBag.CourseId">
+                                            Edit Lecture
+                                        </a>
+                                        <a class="dropdown-item delete-btn"
+                                           href="javascript:void(0);"
+                                           data-id="@item.Id"
+                                           data-title="@item.Title">
+                                            <i class="bx bx-trash me-1"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const lectureId = button.getAttribute('data-id');
+                    const lectureTitle = button.getAttribute('data-title');
+
+                    Swal.fire({
+                        title: `Are you sure you want to delete "${lectureTitle}"?`,
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'No, cancel!',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Simulate the deletion action with a redirect
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: `"${lectureTitle}" has been successfully deleted.`,
+                                icon: 'success'
+                            }).then(() => {
+                                // Replace with actual delete logic, e.g., AJAX or redirect
+                                window.location.href = `/Lectures/DeleteLecture?Id=${lectureId}`;
+                            });
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire(
+                                'Cancelled',
+                                `"${lectureTitle}" is safe.`,
+                                'error'
+                            );
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}

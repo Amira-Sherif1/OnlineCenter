@@ -1,0 +1,91 @@
+﻿@using Models
+@model List<Grade>
+@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="container-fluid p-0 pb-5 mb-5">
+    <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#header-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#header-carousel" data-slide-to="1"></li>
+            <li data-target="#header-carousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="min-height: 300px;">
+                <img class="position-relative w-100" src="~/MainLayout/img/carousel-1.jpg" style="min-height: 300px; object-fit: cover;">
+                <div class="carousel-caption d-flex align-items-center justify-content-center">
+                    <div class="p-5" style="width: 100%; max-width: 900px;">
+                        <h5 class="text-white text-uppercase mb-md-3">Best Online Courses</h5>
+                        <h1 class="display-3 text-white mb-md-4">Best Education From Your Home</h1>
+                        <a href="" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" style="min-height: 300px;">
+                <img class="position-relative w-100" src="~/MainLayout/img/carousel-2.jpg" style="min-height: 300px; object-fit: cover;">
+                <div class="carousel-caption d-flex align-items-center justify-content-center">
+                    <div class="p-5" style="width: 100%; max-width: 900px;">
+                        <h5 class="text-white text-uppercase mb-md-3">Best Online Courses</h5>
+                        <h1 class="display-3 text-white mb-md-4">Best Online Learning Platform</h1>
+                        <a href="" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" style="min-height: 300px;">
+                <img class="position-relative w-100" src="~/MainLayout/img/carousel-3.jpg" style="min-height: 300px; object-fit: cover;">
+                <div class="carousel-caption d-flex align-items-center justify-content-center">
+                    <div class="p-5" style="width: 100%; max-width: 900px;">
+                        <h5 class="text-white text-uppercase mb-md-3">Best Online Courses</h5>
+                        <h1 class="display-3 text-white mb-md-4">New Way To Learn From Home</h1>
+                        <a href="" class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <div class="text-center mb-5">
+            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Grades</h5>
+            <h1>Apply To Grade</h1>
+        </div>
+        <div class="row">
+            @foreach(var item in Model)
+            {
+               
+                    
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
+                        <img class="img-fluid" src="~/MainLayout/img/cat-1.jpg" alt="">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="cat-overlay text-white text-decoration-none" href="/UserSubject/AllSubjects?GradeId=@item.Id">
+                            <h4 class="text-white font-weight-medium">@item.Name</h4>
+
+                            <span>@item.GradeSubjects.Count() Subjects</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="cat-overlay text-white text-decoration-none" href="/Identity/Account/Login">
+                                <h4 class="text-white font-weight-medium">@item.Name</h4>
+
+                                <span>@item.GradeSubjects.Count() Subjects</span>
+                            </a>
+                        }
+
+                    </div>
+                </div>  
+               
+            }
+            
+        </div>
+    </div>
+</div>

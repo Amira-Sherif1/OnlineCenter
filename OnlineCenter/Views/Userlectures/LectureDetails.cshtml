@@ -1,0 +1,190 @@
+﻿@using Models
+@model Lecture
+
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="container-fluid page-header" style="margin-bottom: 90px;">
+    <div class="container">
+        <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
+            <h3 class="display-4 text-white text-uppercase">Lecture</h3>
+            <div class="d-inline-flex text-white">
+                <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
+                <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                <p class="m-0 text-uppercase">Lecture</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="lecture-details-container">
+    <!-- Main Content Section -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Video Section -->
+            <div class="col-12 mb-5">
+                <h2 class="section-title">LECTURE 1</h2>
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h3 class="card-title text-primary"> Lecture Video </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="video-container">
+                            <video id="lectureVideo" controls class="w-100">
+                                <source src="~/videos/@Model.Video" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture Materials Section -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-white">
+                        <h3 class="card-title text-primary">Lecture Materials</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="document-download">
+                            <i class="fas fa-file-pdf fa-2x text-danger"></i>
+                            <a href="~/Doc/@Model.Document" class="btn btn-outline-primary ml-3">
+                                Download Lecture Notes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignment Section -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-white">
+                        <h3 class="card-title text-primary">Assignment</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h4 class="mb-3">Assignment Instructions</h4>
+                            <div class="document-download">
+                                <i class="fas fa-file-alt fa-2x text-info"></i>
+                                <a href="~/Assignments/@Model.Assignment" class="btn btn-outline-primary ml-3">
+                                    Download Assignment
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="assignment-submission">
+                            <h4 class="mb-3">Submit Your Work</h4>
+                            @using (Html.BeginForm("SubmitAssignment", "Lecture", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                <div class="custom-file mb-3">
+                                    <input type="file" class="custom-file-input" id="assignmentSubmission" name="assignmentFile" required>
+                                    <label class="custom-file-label" for="assignmentSubmission">Choose file</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    Submit Assignment
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .lecture-header {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/images/lecture-banner.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        text-align: center;
+        color: white;
+        margin-bottom: 2rem;
+    }
+
+    .lecture-title {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .section-title {
+        color: #ff6b35;
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+    }
+
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+    .document-download {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border: 1px solid #eee;
+        border-radius: 5px;
+    }
+
+    .custom-file-label::after {
+        content: "Browse";
+    }
+
+    .card {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border: none;
+    }
+
+    .card-header {
+        border-bottom: 2px solid #ff6b35;
+    }
+
+    .text-primary {
+        color: #ff6b35 !important;
+    }
+
+    .btn-primary {
+        background-color: #ff6b35;
+        border-color: #ff6b35;
+    }
+
+        .btn-primary:hover {
+            background-color: #e85a2c;
+            border-color: #e85a2c;
+        }
+
+    .btn-outline-primary {
+        color: #ff6b35;
+        border-color: #ff6b35;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #ff6b35;
+            border-color: #ff6b35;
+            color: white;
+        }
+</style>
+
+@section Scripts {
+    <script>
+        // Update file input label with selected filename
+        $('.custom-file-input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+}

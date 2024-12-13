@@ -1,0 +1,102 @@
+﻿@using Models
+@model List<Subject>
+@{
+    Layout = "~/Views/Shared/DashLayout.cshtml";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Add Subject Button -->
+    <div class="mb-4">
+        <a href="@Url.Action("AddSubject", "Subject")" class="btn btn-primary">Add Subject</a>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header">All Subjects</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Subject Name</th>
+                        <th>Courses</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><strong>@item.Name</strong></td>
+                            <td><strong><a href="/Course/Index?SubjectId=@item.Id">Courses</a></strong></td>
+
+
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/Subject/EditSubject?Id=@item.Id">
+                                            <i class="bx bx-edit-alt me-1"></i> Edit
+                                        </a>
+                                        <a class="dropdown-item delete-btn"
+                                           href="javascript:void(0);"
+                                           data-id="@item.Id"
+                                           data-name="@item.Name">
+                                            <i class="bx bx-trash me-1"></i> Delete
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Include SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const Id = button.getAttribute('data-id');
+                    const SubjectName = button.getAttribute('data-name');
+
+
+                    Swal.fire({
+                        title: `Are you sure you want to delete "${SubjectName}"?`,
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'No, cancel!',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: `"${SubjectName}" has been successfully deleted.`,
+                                icon: 'success'
+                            }).then(() => {
+                                window.location.href = `/Subject/DeleteSubject?Id=${Id}`;
+                            });
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire(
+                                'Cancelled',
+                                `"${SubjectName}" is safe.`,
+                                'error'
+                            );
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}

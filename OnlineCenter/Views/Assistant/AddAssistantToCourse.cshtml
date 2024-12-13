@@ -1,0 +1,61 @@
+﻿@using Models
+@model List<Assistant>
+
+@{
+    Layout = "~/Views/Shared/DashLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <!-- Add a back arrow link -->
+        <div class="mb-4">
+            <a href="@Url.Action("Index", "Course")" class="btn btn-link">
+                <i class="bx bx-arrow-back me-2"></i> Back to Courses
+            </a>
+        </div>
+
+        <!-- Card Layout for Adding Assistant to Course -->
+        <div class="row">
+            <div class="col-xl">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Add Assistant to Course</h5>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="AddAssistantToCourse" method="post">
+                            @* Hidden field to pass the CourseId *@
+                            <input type="hidden" name="CourseId" value="@ViewBag.CourseId" />
+
+                            <!-- Dropdown for Assistants -->
+                            <div class="form-group">
+                                <label for="ApplicationUserId" class="form-label">Select Assistant</label>
+                                <select name="ApplicationUserId" id="ApplicationUserId" class="form-control" required>
+                                    <option value="">-- Select an Assistant --</option>
+                                    @foreach (var assistant in Model)
+                                    {
+                                        <option value="@assistant.ApplicationUser.Id">
+                                            @assistant.ApplicationUser.UserName
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="form-group mt-3">
+                                <input type="submit" value="Add Assistant" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

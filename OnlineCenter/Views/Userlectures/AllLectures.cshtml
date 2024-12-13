@@ -1,0 +1,66 @@
+﻿@using Models
+@model List<Lecture>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="container-fluid page-header" style="margin-bottom: 90px;">
+    <div class="container">
+        <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
+            <h3 class="display-4 text-white text-uppercase">Lectures</h3>
+            <div class="d-inline-flex text-white">
+                <p class="m-0 text-uppercase"><a class="text-white" href="/Home/Index">Home</a></p>
+                <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                <p class="m-0 text-uppercase">Lectures</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Lectures</h5>
+            <h1>Course lectures</h1>
+        </div>
+        <div class="row">
+            @foreach(var item in Model)
+            {
+                bool hasPaid = ViewBag.StudentLectures.ContainsKey(item.Id) && ViewBag.StudentLectures[item.Id];
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="rounded overflow-hidden mb-2">
+                        <img class="img-fluid" src="~/MainLayout/img/course-1.jpg" alt="">
+                        <div class="bg-secondary p-4">
+                            <div class="d-flex justify-content-between mb-3">
+                                <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
+                                <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>@item.Date</small>
+                            </div>
+                            <a class="h5" href="">@item.Title</a>
+                            <div class="border-top mt-4 pt-4">
+                                <div class="d-flex justify-content-between">
+                                    <!-- Pay Button -->
+                                    @if (hasPaid)
+                                    {
+                                        <a class="btn btn-primary" href="/UserLectures/LectureDetails?LectureId=@item.Id">Lecture Details</a>
+                                    }
+                                    else
+                                    {
+                                        <form asp-controller="Cart" asp-action="LecturePay" method="post" class="m-0">
+                                            <input type="hidden" name="LectureId" value="@item.Id" />
+                                            <button type="submit" class="btn btn-primary">Pay</button>
+                                        </form>
+                                    }
+
+                                    <!-- Price Section -->
+                                    <h5 class="m-0">$@item.Price</h5>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+            }
+            
+        </div>
+    </div>
+</div>

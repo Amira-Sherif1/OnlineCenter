@@ -1,0 +1,42 @@
+﻿@using Models
+@model List<Subject>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="container-fluid page-header" style="margin-bottom: 90px;">
+    <div class="container">
+        <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
+            <h3 class="display-4 text-white text-uppercase">Subjects</h3>
+            <div class="d-inline-flex text-white">
+                <p class="m-0 text-uppercase"><a class="text-white" href="/Home/Index">Home</a></p>
+                <i class="fa fa-angle-double-right pt-1 px-3"></i>
+                <p class="m-0 text-uppercase">Subjects</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <div class="text-center mb-5">
+            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Subjects</h5>
+            <h1>Explore Top Subjects</h1>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="cat-item position-relative overflow-hidden rounded mb-2">
+                        <img class="img-fluid" src="~/MainLayout/img/subject.jpg" alt="">
+                        <a class="cat-overlay text-white text-decoration-none" href="/UserCourse/AllCourses?SubjectId=@item.Id">
+                            <h4 class="text-white font-weight-medium">@item.Name</h4>
+
+                            <span>@item.Courses.Count() Courses</span>
+                        </a>
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </div>
+</div>

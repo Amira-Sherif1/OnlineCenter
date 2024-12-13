@@ -1,0 +1,46 @@
+﻿
+ @model Models.Answer
+
+<div class="row mb-3">
+    <div class="col-6">
+        <h2>Upload Your Answer</h2>
+    </div>
+</div>
+<div class="row">
+    <form action="/Answer/Create" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="AnswerDoc" class="form-label">Answer Doc</label>
+            <input type="file" class="form-control" id="AnswerDoc" name="AnswerDoc" accept="application/pdf" onchange="previewPDF()">
+        </div>
+        <!-- Preview Container -->
+        <div id="pdf-preview" class="mb-3" style="border: 1px solid #ddd; padding: 10px; max-height: 500px; overflow: auto;">
+            <p>No file selected.</p>
+        </div>
+        <button type="submit" class="btn btn-danger">Submit</button>
+    </form>
+</div>
+
+<script>
+    function previewPDF() {
+        const fileInput = document.getElementById('AnswerDoc');
+        const previewContainer = document.getElementById('pdf-preview');
+        const file = fileInput.files[0];
+
+        previewContainer.innerHTML = ''; // Clear previous previews
+
+        if (file) {
+            if (file.type === "application/pdf") {
+                const fileURL = URL.createObjectURL(file);
+                const iframe = document.createElement('iframe');
+                iframe.src = fileURL;
+                iframe.width = '100%';
+                iframe.height = '500px';
+                previewContainer.appendChild(iframe);
+            } else {
+                previewContainer.textContent = 'Selected file is not a PDF.';
+            }
+        } else {
+            previewContainer.textContent = 'No file selected.';
+        }
+    }
+</script>

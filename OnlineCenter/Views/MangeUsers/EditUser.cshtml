@@ -1,0 +1,134 @@
+﻿@model Models.ViewData.ApplicationUserVm
+
+@{
+    ViewData["Title"] = "EditUser";
+    Layout = "~/Views/Shared/DashLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <!-- Add a back arrow link -->
+        <div class="mb-4">
+            @if (ViewBag.Number == 1)
+            {
+                <a href="@Url.Action("AllTeachers", "Teacher")" class="btn btn-link">
+                    <i class="bx bx-arrow-back me-2"></i> Back to Teachers
+                </a>
+            }
+            else if (ViewBag.Number == 2)
+            {
+                <a href="@Url.Action("AllStudents", "Student")" class="btn btn-link">
+                    <i class="bx bx-arrow-back me-2"></i> Back to Students
+                </a>
+            }
+            else if (ViewBag.Number == 3)
+            {
+                <a href="@Url.Action("AllAssistants", "Assistant")" class="btn btn-link">
+                    <i class="bx bx-arrow-back me-2"></i> Back to Assistants
+                </a>
+            }
+        </div>
+
+        <!-- Basic Layout -->
+        <div class="row">
+            <div class="col-xl">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        @if (ViewBag.Number == 1)
+                        {
+                            <h5 class="mb-0">Edit Teacher</h5>
+                        }
+                        else if (ViewBag.Number == 2)
+                        {
+                            <h5 class="mb-0">Edit Student</h5>
+                        }
+                        else if (ViewBag.Number == 3)
+                        {
+                            <h5 class="mb-0">Edit Assistant</h5>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form asp-action="EditUser" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <input type="hidden" asp-for="Id" />
+
+                                    <!-- Name -->
+                                    <div class="form-group">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="form-group">
+                                        <label asp-for="Password" class="control-label"></label>
+                                        <input asp-for="Password" class="form-control" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Confirm Password -->
+                                    <div class="form-group">
+                                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                                        <input asp-for="ConfirmPassword" class="form-control" />
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div class="form-group">
+                                        <label asp-for="Phone" class="control-label"></label>
+                                        <input asp-for="Phone" class="form-control" />
+                                        <span asp-validation-for="Phone" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Degree -->
+                                    <div class="form-group">
+                                        <label asp-for="Degree" class="control-label"></label>
+                                        <input asp-for="Degree" class="form-control" />
+                                        <span asp-validation-for="Degree" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Address -->
+                                    <div class="form-group">
+                                        <label asp-for="Address" class="control-label"></label>
+                                        <input asp-for="Address" class="form-control" />
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Image -->
+                                    <div class="form-group">
+                                        <label asp-for="Image" class="control-label"></label>
+                                        <input asp-for="Image" type="file" class="form-control" />
+                                        <span asp-validation-for="Image" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="form-group mt-3">
+                                        <input type="submit" value="Save" class="btn btn-primary" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / Content -->
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</div>
