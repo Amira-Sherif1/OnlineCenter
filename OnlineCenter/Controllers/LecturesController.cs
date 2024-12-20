@@ -2,6 +2,7 @@
 using DataAccess.Repository;
 using DataAccsess.Reposetory.IReposetory;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -52,9 +53,13 @@ namespace OnlineCenter.Controllers
         [HttpPost]
 
         public async Task<IActionResult> AddLectureAsync(Lecture lecture, IFormFile Document, IFormFile Assignment, IFormFile Video, int CourseId)
-
-
         {
+            //if (HttpContext.Features.Get<IHttpMaxRequestBodySizeFeature>() is { } maxRequestBodySizeFeature)
+            //{
+            //    maxRequestBodySizeFeature.MaxRequestBodySize = 500 * 1024 * 1024; // Set to 500 MB
+            //}
+
+
             if (ModelState.IsValid)
             {
                 if (Document != null && Document.Length > 0 && Assignment != null && Assignment.Length > 0 && Video != null && Video.Length > 0)

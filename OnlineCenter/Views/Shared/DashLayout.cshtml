@@ -23,7 +23,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Vertical Layouts - Forms | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Online Center</title>
 
     <meta name="description" content="" />
 
@@ -64,7 +64,7 @@
 
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="index.html" class="app-brand-link">
+                    <a href="" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <svg width="25"
                                  viewBox="0 0 25 42"
@@ -108,7 +108,7 @@
                                 </g>
                             </svg>
                         </span>
-                        <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+                        <span class="app-brand-text demo menu-text fw-bolder ms-2">Online Center</span>
                     </a>
 
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -182,6 +182,11 @@
                                         <div data-i18n="Vertical Form">Subjects</div>
                                     </a>
                                 </li>
+                                <li class="menu-item active">
+                                    <a href="/AdminBooks/AllBooks" class="menu-link">
+                                        <div data-i18n="Vertical Form">Books</div>
+                                    </a>
+                                </li>
                             }
                             @* <li class="menu-item">
                                 <a href="form-layouts-horizontal.html" class="menu-link">
@@ -202,6 +207,11 @@
                                 <li class="menu-item">
                                     <a href="/Transactions/LectureTranactions" class="menu-link">
                                         <div data-i18n="Basic Inputs">Lectures Transactions</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="/Transactions/BookTransactions" class="menu-link">
+                                        <div data-i18n="Basic Inputs">Books Transactions</div>
                                     </a>
                                 </li>
                                 
@@ -242,7 +252,7 @@
             <div class="layout-page">
                 <!-- Navbar -->
 
-                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+@*                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
                      id="layout-navbar">
                     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
                         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
@@ -329,7 +339,7 @@
                         </ul>
                     </div>
                 </nav>
-
+ *@
                 <main role="main" class="pb-3">
                     @RenderBody()
                 </main>

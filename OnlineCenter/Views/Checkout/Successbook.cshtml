@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using Models.ViewData
+@model CheckoutSuccessBookViewModel
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="success-icon mb-4">
+                        <i class="fas fa-check-circle text-success fa-5x"></i>
+                    </div>
+                    <h2 class="card-title mb-4">Payment Successful!</h2>
+                    <p class="card-text mb-4">
+                        Thank you for your payment. Your book will arrive soon.
+                    </p>
+                    <div class="buttons">
+                        
+                        <a href="@Url.Action("Index", "Home")"
+                           class="inline-block border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                            Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

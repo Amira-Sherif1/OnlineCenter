@@ -7,10 +7,10 @@
 *.pdf
 
 # Ignore uploaded files directory (if you store them in a specific folder)
-OnlineCenter/wwwroot/images
-OnlineCenter/wwwroot/Assignments
-OnlineCenter/wwwroot/AssignmentsAnswers
-OnlineCenter/wwwroot/videos
+# OnlineCenter/wwwroot/images
+# OnlineCenter/wwwroot/Assignments
+# OnlineCenter/wwwroot/AssignmentsAnswers
+# OnlineCenter/wwwroot/videos
 
 # Ignore Visual Studio build and settings files (optional but recommended)
 bin/

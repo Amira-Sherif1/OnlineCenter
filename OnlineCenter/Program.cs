@@ -52,8 +52,16 @@ namespace OnlineCenter
                 builder.Services.AddScoped<IGradeSubjectRepository, GradeSubjectRepository>();
                 builder.Services.AddScoped<IAssestInReposetory,AssistantInRepository>();
                 builder.Services.AddScoped<IStudentLectureRepository, StudentLectureRepository>();
+                builder.Services.AddScoped<ILectureAnswerRepository, LectureAnswerRepository>();
+                builder.Services.AddScoped<ITeacherBooksRepository, TeacherBooksRepository>();
+                builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+
+
+
 
                 builder.Services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
+                builder.Services.AddScoped<IBookPaymentRepository, BookPaymentRepository>();
+
 
                 builder.Services.AddScoped<IStripeService, StripeService>();
 
@@ -62,9 +70,26 @@ namespace OnlineCenter
 
                 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
                 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+                //builder.Services.Configure<FormOptions>(options =>
+                //{
+                //    options.MultipartBodyLengthLimit = 104857600; // 100 MB
+                //});
+
+                //builder.Services.Configure<IISServerOptions>(options =>
+                //{
+                //    options.MaxRequestBodySize = 524288000; // 500 MB
+                //});
+
+
+                builder.WebHost.ConfigureKestrel(options =>
+                {
+                    options.Limits.MaxRequestBodySize = 500 * 1024 * 1024; // 500 MB
+                });
+
+                // Add services and configuration
                 builder.Services.Configure<FormOptions>(options =>
                 {
-                    options.MultipartBodyLengthLimit = 104857600; // 100 MB
+                    options.MultipartBodyLengthLimit = 500 * 1024 * 1024; // 500 MB
                 });
 
                 var app = builder.Build();

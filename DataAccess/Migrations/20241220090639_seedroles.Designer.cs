@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241211044433_transaction")]
-    partial class transaction
+    [Migration("20241220090639_seedroles")]
+    partial class seedroles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -319,6 +319,46 @@ namespace DataAccess.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("Models.BookPayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StripeSessionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("Bookpayments");
+                });
+
             modelBuilder.Entity("Models.Cart", b =>
                 {
                     b.Property<string>("StudentId")
@@ -326,6 +366,9 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("BookId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("bit");
 
                     b.HasKey("StudentId", "BookId");
 
@@ -405,7 +448,7 @@ namespace DataAccess.Migrations
                     b.Property<string>("Assignment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CourseId")
+                    b.Property<int?>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -422,7 +465,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Video")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -443,7 +485,7 @@ namespace DataAccess.Migrations
                     b.Property<int>("LectureId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Grade")
+                    b.Property<double?>("Grade")
                         .HasColumnType("float");
 
                     b.HasKey("StudentId", "AnswerId", "LectureId");
@@ -660,7 +702,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentId")
@@ -774,6 +815,17 @@ namespace DataAccess.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("Models.BookPayment", b =>
+                {
+                    b.HasOne("Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
             modelBuilder.Entity("Models.Cart", b =>
                 {
                     b.HasOne("Models.Book", "Book")
@@ -827,9 +879,7 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Models.Course", "Course")
                         .WithMany("Lectures")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
                 });
@@ -967,8 +1017,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Models.Answer", b =>
                 {
-                    b.Navigation("lectureAnswer")
-                        .IsRequired();
+                    b.Navigation("lectureAnswer");
                 });
 
             modelBuilder.Entity("Models.Assistant", b =>
@@ -980,8 +1029,7 @@ namespace DataAccess.Migrations
                 {
                     b.Navigation("Carts");
 
-                    b.Navigation("Teacherbook")
-                        .IsRequired();
+                    b.Navigation("Teacherbook");
                 });
 
             modelBuilder.Entity("Models.Course", b =>
@@ -1004,8 +1052,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Models.Lecture", b =>
                 {
-                    b.Navigation("LectureAnswer")
-                        .IsRequired();
+                    b.Navigation("LectureAnswer");
 
                     b.Navigation("StudentLectures");
                 });

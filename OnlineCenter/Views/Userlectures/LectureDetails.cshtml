@@ -5,18 +5,6 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<div class="container-fluid page-header" style="margin-bottom: 90px;">
-    <div class="container">
-        <div class="d-flex flex-column justify-content-center" style="min-height: 300px">
-            <h3 class="display-4 text-white text-uppercase">Lecture</h3>
-            <div class="d-inline-flex text-white">
-                <p class="m-0 text-uppercase"><a class="text-white" href="">Home</a></p>
-                <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                <p class="m-0 text-uppercase">Lecture</p>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="lecture-details-container">
     <!-- Main Content Section -->
@@ -76,6 +64,32 @@
 
                         <div class="assignment-submission">
                             <h4 class="mb-3">Submit Your Work</h4>
+                            @if (ViewBag.lectureanswer == null)
+                            {
+                                @using (Html.BeginForm("Create", "Answer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.Hidden("LectureId", Model.Id) <!-- Include LectureId as a hidden field -->
+
+                                    <div class="custom-file mb-3">
+                                        <input type="file" class="custom-file-input" id="assignmentSubmission" name="AnswerDoc" required>
+                                        <label class="custom-file-label" for="assignmentSubmission">Choose file</label>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Submit Assignment</button>
+                                }
+                            }
+                            else
+                            {
+                                <i class="fas fa-check-circle fa-2x text-success"></i>
+                                <p class="ml-3 mb-0">
+                                    <a href="~/Document/@ViewBag.lectureanswer" class="btn btn-outline-primary ml-3">Your Submitted Assignment</a>
+                                </p>
+                            }
+                        </div>
+
+
+                       @*  <div class="assignment-submission">
+                            <h4 class="mb-3">Submit Your Work</h4>
                             @using (Html.BeginForm("SubmitAssignment", "Lecture", FormMethod.Post, new { enctype = "multipart/form-data" }))
                             {
                                 <div class="custom-file mb-3">
@@ -86,7 +100,7 @@
                                     Submit Assignment
                                 </button>
                             }
-                        </div>
+                        </div> *@
                     </div>
                 </div>
             </div>

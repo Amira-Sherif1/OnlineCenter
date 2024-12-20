@@ -40,7 +40,10 @@
     <Folder Include="wwwroot\Doc\" />
     <Folder Include="wwwroot\Assignments\" />
     <Folder Include="wwwroot\AssignmentsAnswers\" />
-    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\Books\" />
   </ItemGroup>
+
+
+
 
 </Project>

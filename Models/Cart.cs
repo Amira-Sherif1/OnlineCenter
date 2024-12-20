@@ -12,6 +12,7 @@ namespace Models
         public Book Book { get; set; }
         public string StudentId { get; set; }
         public Student Student { get; set; }
+        public bool status { get; set; } = false;
 
     }
 }

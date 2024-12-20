@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ECOURSES - Online Courses HTML Template</title>
+    <title>Online Center</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -47,16 +47,20 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <a href="/Home/Index" class="nav-item nav-link active">Home</a>
-                                <a href="about.html" class="nav-item nav-link">About</a>
+                                <a href="/Home/about" class="nav-item nav-link">About</a>
                                 <a href="/UserCourse/AllCourses" class="nav-item nav-link">Courses</a>
-                                <a href="teacher.html" class="nav-item nav-link">Teachers</a>
+                                <a href="/Teacher/AllTeachersmain" class="nav-item nav-link">Teachers</a>
+                                <a href="/Book/Index" class="nav-item nav-link">Books</a>
+
                             }
                             else
                             {
                                 <a href="/Home/Index" class="nav-item nav-link active">Home</a>
                                 <a href="/Identity/Account/Login" class="nav-item nav-link">About</a>
                                 <a href="/Identity/Account/Login" class="nav-item nav-link">Courses</a>
-                                <a href="teacher.html" class="nav-item nav-link">Teachers</a>
+                                <a href="/Identity/Account/Login" class="nav-item nav-link">Teachers</a>
+                                <a href="/Identity/Account/Login" class="nav-item nav-link">Books</a>
+
                             }
                             
                       
@@ -99,7 +103,7 @@
     
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
-        <div class="row pt-5">
+      @*   <div class="row pt-5">
             <div class="col-lg-7 col-md-12">
                 <div class="row">
                     <div class="col-md-6 mb-5">
@@ -138,7 +142,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> *@
     </div>
 
     <!-- Back to Top -->

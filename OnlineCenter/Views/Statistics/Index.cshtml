@@ -1,8 +1,455 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using Models.ViewData
+@model DashboardViewModel
 @{
     Layout = "~/Views/Shared/DashLayout.cshtml";
 }
+
+<div class="container-fluid p-4">
+    <!-- Summary Cards Row -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-primary">
+                <h3>Total Book Sales</h3>
+                <div class="value">$@Model.TotalBookSales.ToString("N2")</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-success">
+                <h3>Total Lecture Revenue</h3>
+                <div class="value">$@Model.TotalLectureRevenue.ToString("N2")</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-info">
+                <h3>Total Students</h3>
+                <div class="value">@Model.TotalStudents</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-warning">
+                <h3>Active Lectures</h3>
+                <div class="value">@Model.ActiveLectures</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Monthly Revenue Overview & Revenue Sources Charts -->
+        <div class="col-xl-6 col-md-6">
+            <div class="chart-container">
+                <div class="chart-title">Monthly Revenue Overview</div>
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+        <div class="col-xl-6 col-md-6">
+            <div class="chart-container">
+                <div class="chart-title">Lecture Enrollment Distribution</div>
+                <canvas id="lectureEnrollmentChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row (Lecture Enrollment and Students per Grade) -->
+    <div class="row">
+       
+        <!-- Students per Grade Level Chart -->
+        <div class="col-xl-6 col-md-6">
+            <div class="chart-container">
+                <div class="chart-title">Students per Grade Level</div>
+                <canvas id="gradeDistributionChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6">
+            <div class="chart-container">
+                <div class="chart-title">Revenue Sources</div>
+                <canvas id="revenuePieChart"></canvas>
+            </div>
+
+        </div>
+        <!-- Lecture Enrollment Chart -->
+        
+
+    </div>
+
+    <!-- Revenue Charts Row -->
+</div>
+
+<style>
+    .stat-card {
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .stat-primary {
+        background: linear-gradient(45deg, #4e73df, #224abe);
+    }
+
+    .stat-success {
+        background: linear-gradient(45deg, #1cc88a, #13855c);
+    }
+
+    .stat-info {
+        background: linear-gradient(45deg, #36b9cc, #258391);
+    }
+
+    .stat-warning {
+        background: linear-gradient(45deg, #f6c23e, #dda20a);
+    }
+
+    .stat-card h3 {
+        color: white;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .stat-card .value {
+        color: white;
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+
+    .chart-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .chart-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #4e73df;
+        margin-bottom: 15px;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Lecture Enrollment Chart
+        new Chart(document.getElementById('lectureEnrollmentChart'), {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.LectureNames)),
+                datasets: [{
+                    label: 'Number of Students',
+                    data: @Html.Raw(Json.Serialize(Model.LectureEnrollments)),
+                    backgroundColor: '#4e73df',
+                    borderColor: '#4e73df',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Grade Distribution Chart
+        new Chart(document.getElementById('gradeDistributionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.GradeLabels)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.GradeDistribution)),
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Monthly Revenue Chart
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.MonthLabels)),
+                datasets: [{
+                    label: 'Books Revenue',
+                    data: @Html.Raw(Json.Serialize(Model.MonthlyBooksRevenue)),
+                    borderColor: '#4e73df',
+                    tension: 0.1
+                }, {
+                    label: 'Lectures Revenue',
+                    data: @Html.Raw(Json.Serialize(Model.MonthlyLecturesRevenue)),
+                    borderColor: '#1cc88a',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Revenue Sources Pie Chart
+        new Chart(document.getElementById('revenuePieChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Books', 'Lectures'],
+                datasets: [{
+                    data: [@Model.TotalBookSales, @Model.TotalLectureRevenue],
+                    backgroundColor: ['#4e73df', '#1cc88a']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+}
+
+
+
+@* @using Models.ViewData
+@model DashboardViewModel
+@{
+    Layout = "~/Views/Shared/DashLayout.cshtml";
+}
+
+<div class="container-fluid p-4">
+    <!-- Summary Cards Row -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-primary">
+                <h3>Total Book Sales</h3>
+                <div class="value">$@Model.TotalBookSales.ToString("N2")</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-success">
+                <h3>Total Lecture Revenue</h3>
+                <div class="value">$@Model.TotalLectureRevenue.ToString("N2")</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-info">
+                <h3>Total Students</h3>
+                <div class="value">@Model.TotalStudents</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-warning">
+                <h3>Active Lectures</h3>
+                <div class="value">@Model.ActiveLectures</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row">
+        <!-- Lecture Enrollment Chart -->
+        <div class="col-xl-6">
+            <div class="chart-container">
+                <div class="chart-title">Lecture Enrollment Distribution</div>
+                <canvas id="lectureEnrollmentChart"></canvas>
+            </div>
+        </div>
+        <!-- Grade Distribution Chart -->
+        <div class="col-xl-6">
+            <div class="chart-container">
+                <div class="chart-title">Students per Grade Level</div>
+                <canvas id="gradeDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Charts Row -->
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="chart-container">
+                <div class="chart-title">Monthly Revenue Overview</div>
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="chart-container">
+                <div class="chart-title">Revenue Sources</div>
+                <canvas id="revenuePieChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-card {
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .stat-primary {
+        background: linear-gradient(45deg, #4e73df, #224abe);
+    }
+
+    .stat-success {
+        background: linear-gradient(45deg, #1cc88a, #13855c);
+    }
+
+    .stat-info {
+        background: linear-gradient(45deg, #36b9cc, #258391);
+    }
+
+    .stat-warning {
+        background: linear-gradient(45deg, #f6c23e, #dda20a);
+    }
+
+    .stat-card h3 {
+        color: white;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .stat-card .value {
+        color: white;
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+
+    .chart-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .chart-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #4e73df;
+        margin-bottom: 15px;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Lecture Enrollment Chart
+        new Chart(document.getElementById('lectureEnrollmentChart'), {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.LectureNames)),
+                datasets: [{
+                    label: 'Number of Students',
+                    data: @Html.Raw(Json.Serialize(Model.LectureEnrollments)),
+                    backgroundColor: '#4e73df',
+                    borderColor: '#4e73df',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Grade Distribution Chart
+        new Chart(document.getElementById('gradeDistributionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.GradeLabels)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.GradeDistribution)),
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Monthly Revenue Chart
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.MonthLabels)),
+                datasets: [{
+                    label: 'Books Revenue',
+                    data: @Html.Raw(Json.Serialize(Model.MonthlyBooksRevenue)),
+                    borderColor: '#4e73df',
+                    tension: 0.1
+                }, {
+                    label: 'Lectures Revenue',
+                    data: @Html.Raw(Json.Serialize(Model.MonthlyLecturesRevenue)),
+                    borderColor: '#1cc88a',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Revenue Sources Pie Chart
+        new Chart(document.getElementById('revenuePieChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Books', 'Lectures'],
+                datasets: [{
+                    data: [@Model.TotalBookSales, @Model.TotalLectureRevenue],
+                    backgroundColor: ['#4e73df', '#1cc88a']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+}
+ *@

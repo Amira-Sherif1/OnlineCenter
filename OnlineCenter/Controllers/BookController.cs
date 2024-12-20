@@ -1,26 +1,41 @@
 ﻿using DataAccess;
 using DataAccess.Reposetory.IReposetory;
+using DataAccess.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace OnlineCenter.Controllers
 {
-    [Authorize(Roles = "Admin,Teacher")]
+    //[Authorize(Roles = "Admin,Teacher")]
     public class BookController : Controller
     {
         public ApplicationDbContext _db;
         public IBookRepository BookRepository { get; set; }
-        public BookController(IBookRepository BookRepository)
+        public UserManager<IdentityUser> userManager { get; set; }
+        public ICartRepository cartRepository { get; set; }
+        public BookController(ICartRepository cartRepository ,UserManager<IdentityUser> userManager ,IBookRepository BookRepository)
         {
             this.BookRepository = BookRepository;
+            this.userManager = userManager;
+            this.cartRepository = cartRepository;
         }
         public IActionResult Index()
         {
+            var userid = userManager.GetUserId(User);
+            var studentbooks = cartRepository.GetAll([e => e.Book], expression: e => e.StudentId == userid);
+            var studentLecturesDict = studentbooks.ToDictionary(sl => sl.BookId, sl => sl.status);
+            ViewBag.StudentBooks = studentLecturesDict;
 
-            //var books = _db.Books.ToList();
-            var books = BookRepository.GetAll();
-            
+            var books = BookRepository.GetAll([m=>m.Teacherbook , m=>m.Teacherbook.Teacher , m=>m.Teacherbook.Teacher.ApplicationUser])  // Assuming this returns List<Book>
+                .AsQueryable()  
+                .Include(b => b.Teacherbook)
+                .ThenInclude(b => b.Teacher)
+                .ThenInclude(b=>b.ApplicationUser)
+                .ToList();
+
             return View(books);
         }
         public IActionResult Create()
@@ -39,7 +54,7 @@ namespace OnlineCenter.Controllers
 
         public IActionResult Edit(int bookId)
         {
-            var book = BookRepository.GetOne(expresion:e=>e.Id == bookId);
+            var book = BookRepository.GetOne([e=>e.Teacherbook],expresion:e=>e.Id == bookId);
            // var book= _db.Books.Find(bookId);
             return View(book);
         }

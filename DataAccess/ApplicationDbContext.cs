@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿//using DataAccess.Migrations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Models;
 using Models.ViewData;
 
@@ -28,6 +30,8 @@ namespace DataAccess
         public DbSet<Answer> Answers { get; set; }
         public DbSet<ApplicationUserVm> applicationUserVms { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+        public DbSet<BookPayment> Bookpayments { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
       : base(options)
         {
@@ -73,7 +77,7 @@ namespace DataAccess
             modelBuilder.Entity<TeacherBook>()
                 .HasKey(tb => new { tb.TeacherId, tb.BookId, tb.CourseId });
 
-            // Configure any relationships or cascade delete behavior as needed
+            //Configure any relationships or cascade delete behavior as needed
             modelBuilder.Entity<AssistIn>()
                 .HasOne(ai => ai.Teacher)
                 .WithMany(t => t.AssistIns)
@@ -179,31 +183,43 @@ namespace DataAccess
             modelBuilder.Entity<Teacher>()
            .HasKey(c => new { c.ApplicationUserId });
 
+            modelBuilder.Entity<BookPayment>()
+          .HasKey(c => new {c.Id});
+
+
             modelBuilder.Entity<Student>()
            .HasKey(c => new { c.ApplicationUserId });
 
             modelBuilder.Entity<Assistant>()
            .HasKey(c => new { c.ApplicationUserId });
 
-            //modelBuilder.Entity<ApplicationUser>()
-            //  .HasOne(tc => tc.Assistant)
-            //  .WithOne(c => c.ApplicationUser)
-            //  .HasForeignKey<ApplicationUser>(tc => tc.AssistantId);
+            modelBuilder.Entity<Grade>()
+                .HasMany(e => e.Students)
+                .WithOne(p => p.Grade);
 
-            //modelBuilder.Entity<ApplicationUser>()
-            //  .HasOne(tc => tc.Admin)
-            //  .WithOne(c => c.Applicationuser)
-            //  .HasForeignKey<ApplicationUser>(tc => tc.AdminId);
+            modelBuilder.Entity<Grade>()
+            .HasMany(e => e.GradeSubjects)
+            .WithOne(p => p.Grade);
 
-            //modelBuilder.Entity<ApplicationUser>()
-            //  .HasOne(tc => tc.Teacher)
-            //  .WithOne(c => c.ApplicationUser)
-            //  .HasForeignKey<ApplicationUser>(tc => tc.TeacherId);
+            modelBuilder.Entity<Course>()
+         .HasMany(e => e.TeacherCourses)
+         .WithOne(p => p.Course);
 
-            //modelBuilder.Entity<ApplicationUser>()
-            //  .HasOne(tc => tc.Student)
-            //  .WithOne(c => c.ApplicationUser)
-            //  .HasForeignKey<ApplicationUser>(tc => tc.StudentId);
+
+            modelBuilder.Entity<Course>()
+         .HasMany(e => e.Teacherbooks)
+         .WithOne(p => p.Course);
+
+
+            modelBuilder.Entity<Course>()
+         .HasMany(e => e.AssistIns)
+         .WithOne(p => p.Course);
+             
+            modelBuilder.Entity<Lecture>()
+        .HasMany(e => e.StudentLectures)
+        .WithOne(p => p.Lecture);
+
+
 
         }
 

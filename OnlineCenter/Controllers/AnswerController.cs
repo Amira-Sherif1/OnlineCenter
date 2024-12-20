@@ -1,5 +1,8 @@
 ﻿using DataAccess;
+using DataAccess.Reposetory.IReposetory;
 using DataAccess.Repository;
+using DataAccsess.Reposetory.IReposetory;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -10,26 +13,33 @@ namespace OnlineCenter.Controllers
     public class AnswerController : Controller
     {
         // public ApplicationDbContext _db;
-        public AnswerRepository answerRepository { get; set; }
-        public AnswerController(AnswerRepository answerRepository)
+        public IAnswerRepository answerRepository { get; set; }
+        public IStudentLectureRepository studentRepository { get; set; }
+        public ILectureRepository LectureRepository { get; set; }
+        public ILectureAnswerRepository LectureAnswerRepository { get; set; }
+        public UserManager<IdentityUser> userManager { get; set; }
+        public AnswerController(UserManager<IdentityUser> userManager,ILectureAnswerRepository LectureAnswerRepository,ILectureRepository LectureRepository,IStudentLectureRepository studentRepository,IAnswerRepository answerRepository)
         {
             this.answerRepository = answerRepository;
+            this.studentRepository = studentRepository;
+            this.LectureRepository = LectureRepository;
+            this.LectureAnswerRepository=LectureAnswerRepository;
+            this.userManager = userManager;
         }
-        public IActionResult Index()
+        public IActionResult GetAll(string StudentId , int LectureId)
         {
-            var answers = answerRepository.GetAll();
-            //var answers = _db.Answers.ToList();
-           
+            var answers = answerRepository.GetAll([e=>e.lectureAnswer],expression:e=>e.lectureAnswer.LectureId==LectureId && e.lectureAnswer.StudentId==StudentId);           
             return View(answers);
         }
-        public IActionResult Create()
+        public IActionResult Create(int LectureId)
         {
+            ViewBag.LectureId = LectureId;
             return View();
         }
 
 
         [HttpPost]
-        public  IActionResult Create(Answer answer,IFormFile AnswerDoc)
+        public  IActionResult Create(Answer answer,IFormFile AnswerDoc , int LectureId)
         {
             if (AnswerDoc.Length > 0)
             {
@@ -41,11 +51,19 @@ namespace OnlineCenter.Controllers
                 }
                 answer.AnswerDoc=fileName;
             }
+            var lectureanswer = new LectureAnswer()
+            {
+                StudentId = userManager.GetUserId(User),
+                LectureId= LectureId,
+                AnswerId=answer.Id,
+                Answer=answer,
+                Grade=0
+            };
             answerRepository.Add(answer);
             answerRepository.Save();
-            //_db.Answers.Add(answer);
-            //_db.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            LectureAnswerRepository.Add(lectureanswer);
+            LectureAnswerRepository.Save();
+            return RedirectToAction("LectureDetails", "UserLectures", new {LectureId = LectureId});
         }
 
         public IActionResult Edit(int answerId)

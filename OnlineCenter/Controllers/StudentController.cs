@@ -17,5 +17,12 @@ namespace OnlineCenter.Controllers
             var students = StudentRepository.GetAll([e => e.ApplicationUser]);
             return View(students);
         }
+        public IActionResult AllStudentsInLecture(int LectureId)
+        {
+            ViewBag.Lecture = LectureId;
+            var students = StudentRepository.GetAll([e => e.ApplicationUser , e=>e.LectureAnswer , e => e.LectureAnswer.Answer] , expression:e=>e.StudentLectures.Any(th=>th.LectureId==LectureId));
+            return View(students);
+        }
+
     }
 }

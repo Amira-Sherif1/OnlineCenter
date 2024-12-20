@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Models;
 using Models.ViewData;
+using NuGet.DependencyResolver;
 using System.Data;
 using Utilities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -52,21 +53,11 @@ namespace OnlineCenter.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser(ApplicationUserVm userVM , int number )
+        public async Task<IActionResult> AddUser(ApplicationUserVm userVM , int number , IFormFile Image)
         {
             if (ModelState.IsValid)
             {
-                //string filename="";
-                //if (Image != null && Image.Length > 0)
-                //{
-                //    filename = Guid.NewGuid() + Path.GetExtension(Image.FileName);
-                //    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", filename);
-
-                //    using (var stream = System.IO.File.Create(filepath))
-                //    {
-                //        await Image.CopyToAsync(stream);
-                //    }
-                //}
+               
                 ApplicationUser application = new()
                 {
                     UserName = userVM.Name,
@@ -85,13 +76,29 @@ namespace OnlineCenter.Controllers
                     {
                         if (result.Succeeded)
                         {
-
                             Teacher teacher = new()
                             {
                                 ApplicationUserId = application.Id,
-                                Degree = userVM.Degree
+                                Degree = userVM.Degree,
+                                ApplicationUser= application
+
+
                             }
-                            ;
+                           ;
+                            if (Image != null && Image.Length > 0)
+                            {
+                                var filename = Guid.NewGuid() + Path.GetExtension(Image.FileName);
+                                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", filename);
+
+                                using (var stream = System.IO.File.Create(filepath))
+                                {
+                                    await Image.CopyToAsync(stream);
+                                }
+                                teacher.ApplicationUser.Image = filename;
+
+                            }
+
+
 
                             teacherRepository.Add(teacher);
                             teacherRepository.Save();
@@ -115,9 +122,22 @@ namespace OnlineCenter.Controllers
                             Student student = new()
                             {
                                 ApplicationUserId = application.Id,
+                                ApplicationUser = application,
                                 GradeId = parsedGradeId
                             }
                             ;
+                            if (Image != null && Image.Length > 0)
+                            {
+                                var filename = Guid.NewGuid() + Path.GetExtension(Image.FileName);
+                                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", filename);
+
+                                using (var stream = System.IO.File.Create(filepath))
+                                {
+                                    await Image.CopyToAsync(stream);
+                                }
+                                student.ApplicationUser.Image = filename;
+
+                            }
 
                             StudentRepository.Add(student);
                             StudentRepository.Save();
@@ -142,9 +162,22 @@ namespace OnlineCenter.Controllers
                             Assistant assistant = new()
                             {
                                 ApplicationUserId = application.Id,
+                                ApplicationUser=application,
                                 Degree = userVM.Degree
                             }
                             ;
+                            if (Image != null && Image.Length > 0)
+                            {
+                                var filename = Guid.NewGuid() + Path.GetExtension(Image.FileName);
+                                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", filename);
+
+                                using (var stream = System.IO.File.Create(filepath))
+                                {
+                                    await Image.CopyToAsync(stream);
+                                }
+                                assistant.ApplicationUser.Image = filename;
+
+                            }
                             AssistantRepository.Add(assistant);
                             AssistantRepository.Save();
                             var roleResult = await UserManager.AddToRoleAsync(application, "Assistant");

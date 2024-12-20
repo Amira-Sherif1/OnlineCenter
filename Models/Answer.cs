@@ -12,6 +12,6 @@ namespace Models
         public int Id { get; set; }
         [Required]
         public string AnswerDoc { get; set; }
-        public LectureAnswer lectureAnswer { get; set; }
+        public LectureAnswer? lectureAnswer { get; set; }
     }
 }

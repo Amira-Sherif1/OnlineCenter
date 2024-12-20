@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OnlineCenter.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class TeacherController : Controller
     {
         public ITeacherRepository teacherRepository { get; set; }
@@ -17,5 +17,11 @@ namespace OnlineCenter.Controllers
             var teachers = teacherRepository.GetAll([e=>e.ApplicationUser]);
             return View(model:teachers);
         }
+        public IActionResult AllTeachersmain()
+        {
+            var teachers = teacherRepository.GetAll([e => e.ApplicationUser]);
+            return View(model: teachers);
+        }
+
     }
 }
